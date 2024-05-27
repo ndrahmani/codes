@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_quadratic_field_lattice(d, connect_dots='solid', plot_circles=False, circle_color='blue', circle_alpha=0.3):
+def plot_quadratic_field_lattice(d, connect_dots='solid', plot_circles=False, circle_color='blue', circle_alpha=0.3,radius= 2.5):
     """
     Plot the lattice of a quadratic number field.
 
@@ -53,7 +53,7 @@ def plot_quadratic_field_lattice(d, connect_dots='solid', plot_circles=False, ci
 
             # Plot circles if required
             if plot_circles:
-                circle = plt.Circle((coordx, coordy), radius=np.sqrt(1 + 0*omega_imag**2)/2, color=circle_color, alpha=circle_alpha, edgecolor='none')
+                circle = plt.Circle((coordx, coordy), radius=radius, color=circle_color, alpha=circle_alpha, edgecolor='none')
                 ax.add_patch(circle)
 
             # Connect points horizontally
