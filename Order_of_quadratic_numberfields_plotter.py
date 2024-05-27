@@ -1,23 +1,27 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_quadratic_field_lattice(d, connect_dots='solid'):
+def plot_quadratic_field_lattice(d, connect_dots='solid', plot_circles=False, circle_color='blue', circle_alpha=0.3):
     """
     Plot the lattice of a quadratic number field.
-    
+
     Parameters:
     - d: Square-free integer for the quadratic field Q(sqrt(d)).
     - connect_dots: 'solid' for solid lines, 'dashed' for dashed lines, 'none' to hide connections.
+    - plot_circles: Boolean to indicate whether to plot circles at each lattice point.
+    - circle_color: Color of the circles.
+    - circle_alpha: Opacity of the circles.
     """
     # Check if d is square-free
     if any(d % p**2 == 0 for p in range(2, int(np.sqrt(abs(d))) + 1)):
         raise ValueError("d must be a square-free integer.")
-    
+
     # Determine omega based on d
     if d % 4 == 1:
         omega_real = 0.5
         omega_imag = np.sqrt(abs(d)) / 2
-        omega_tex = r"$\frac{1+\sqrt{"+str(d)+"}}{2}$"
+        omega_tex = r"$
+rac{1+\sqrt{"+str(d)+"}}{2}$"
     else:
         omega_real = 0
         omega_imag = np.sqrt(abs(d))
@@ -27,18 +31,18 @@ def plot_quadratic_field_lattice(d, connect_dots='solid'):
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.axhline(0, color='gray', lw=0.5)
     ax.axvline(0, color='gray', lw=0.5)
-    
+
     # Set initial plot limits
     ax.set_xlim(-5, 5)
     ax.set_ylim(-5, 5)
-    
+
     # Draw plot to get the actual limits
     plt.draw()
-    
+
     # Get actual limits
     x_limits = ax.get_xlim()
     y_limits = ax.get_ylim()
-    
+
     # Calculate appropriate range for lattice points
     x_range = int(np.ceil(max(abs(x_limits[0]*1.5), abs(x_limits[1]*1.5))))
     y_range = int(np.ceil(max(abs(y_limits[0]*1.5), abs(y_limits[1]*1.5)) / omega_imag))
@@ -50,14 +54,19 @@ def plot_quadratic_field_lattice(d, connect_dots='solid'):
             coordx = x + omega_real * y
             coordy = omega_imag * y
             plt.plot(coordx, coordy, 'bo')
-            
+
+            # Plot circles if required
+            if plot_circles:
+                circle = plt.Circle((coordx, coordy), radius=np.sqrt(1 + 0*omega_imag**2)/2, color=circle_color, alpha=circle_alpha, edgecolor='none')
+                ax.add_patch(circle)
+
             # Connect points horizontally
             if connect_dots != 'none' and y < y_range:
                 nextx = x + omega_real * (y + 1)
                 nexty = omega_imag * (y + 1)
                 linestyle = '--' if connect_dots == 'dashed' else '-'
                 plt.plot([coordx, nextx], [coordy, nexty], 'b', linestyle=linestyle, lw=0.5)
-            
+
             # Connect points vertically
             if connect_dots != 'none' and x < x_range:
                 nextx = (x + 1) + omega_real * y
@@ -72,7 +81,7 @@ def plot_quadratic_field_lattice(d, connect_dots='solid'):
         [1 + omega_real, omega_imag],
         [omega_real, omega_imag]
     ])
-    
+
     # Fill the fundamental parallelepiped
     ax.fill(vertices[:, 0], vertices[:, 1], 'gray', alpha=0.5)
 
@@ -86,7 +95,7 @@ def plot_quadratic_field_lattice(d, connect_dots='solid'):
     ax.set_ylim(y_limits)
     ax.set_xlabel('$x$')
     ax.set_ylabel('$y$')
-    ax.set_title(f'Ring of integers of the Quadratic Number Field $\\mathbb{{Q}}(\\sqrt{{{d}}})$')
+    ax.set_title(f'Ring of integers of the Quadratic Number Field $\mathbb{{Q}}(\sqrt{{{d}}})$')
     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
     ax.set_aspect('equal', adjustable='box')
 
@@ -94,5 +103,5 @@ def plot_quadratic_field_lattice(d, connect_dots='solid'):
     plt.show()
 
 # Example usage:
-d = -3  # Change this value for different d
-plot_quadratic_field_lattice(d, connect_dots='dashed')  # Options: 'solid', 'dashed', 'none'
+d = -15  # Change this value for different d
+plot_quadratic_field_lattice(d, connect_dots='dashed', plot_circles=True, circle_color='gray', circle_alpha=0.3)  # Options: 'solid', 'dashed', 'none'
