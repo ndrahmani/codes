@@ -13,15 +13,11 @@ def plot_quadratic_field_lattice(d, connect_dots='solid', plot_circles=False, ci
     - circle_alpha: Opacity of the circles.
     """
     # Check if d is square-free
-    if any(d % p**2 == 0 for p in range(2, int(np.sqrt(abs(d))) + 1)):
-        raise ValueError("d must be a square-free integer.")
-
     # Determine omega based on d
     if d % 4 == 1:
         omega_real = 0.5
         omega_imag = np.sqrt(abs(d)) / 2
-        omega_tex = r"$
-rac{1+\sqrt{"+str(d)+"}}{2}$"
+        omega_tex = r"$\frac{1+\sqrt{"+str(d)+"}}{2}$"
     else:
         omega_real = 0
         omega_imag = np.sqrt(abs(d))
